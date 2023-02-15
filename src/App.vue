@@ -1,8 +1,10 @@
 <script setup lang="ts">
 // import { RouterView } from 'vue-router'
+import { request } from './services/request'
 import { useUserStore } from './stores'
-
 const store = useUserStore()
+
+// request('/', 'get')
 </script>
 
 <template>

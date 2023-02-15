@@ -1,7 +1,13 @@
 import { useUserStore } from '@/stores'
 import { Toast } from 'vant'
-import axios from 'axios'
+import axios, { type Method } from 'axios'
 import router from '@/router'
+
+type Data<T> = {
+  code: number
+  message: string
+  data: T
+}
 
 const instance = axios.create({
   baseURL: 'https://consult-api.itheima.net/',
@@ -37,4 +43,12 @@ instance.interceptors.response.use(
   }
 )
 
-export default instance
+const request = <T>(url: string, method: Method = 'get', data?: object) => {
+  return instance.request<T, Data<T>>({
+    url,
+    method,
+    [method.toLowerCase() === 'get' ? 'params' : 'data']: data
+  })
+}
+
+export { instance, request }
