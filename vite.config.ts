@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-
+import AutoImport from 'unplugin-auto-import/vite'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -10,10 +10,14 @@ import { VantResolver } from 'unplugin-vue-components/resolvers'
 export default defineConfig({
   // base: '/maguibing',
   plugins: [
-    vue(),
+    vue({
+      reactivityTransform: true
+    }),
     Components({
-      resolvers: [VantResolver()]
-    })
+      // dts: false,
+      resolvers: [VantResolver({ importStyle: false })]
+    }),
+    AutoImport({ imports: ['vue', 'vue-router'] })
   ],
   resolve: {
     alias: {

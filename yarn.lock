@@ -405,7 +405,7 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nuxt/kit@^3.1.1":
+"@nuxt/kit@^3.1.1", "@nuxt/kit@^3.1.2":
   version "3.2.0"
   resolved "https://registry.npmmirror.com/@nuxt/kit/-/kit-3.2.0.tgz#d770e7f087f43d0030f84259671b8f6a5ea0b59d"
   integrity sha512-Otb1S/08tDxbpeQYLMynjr2TX7ssU1ynbWDpVzFzLBdfHkGWHXpIhJr+0u3LdnPUBw6C/xPXe7fd7RuXI9avoA==
@@ -2875,6 +2875,19 @@ unimport@^2.2.4:
     pkg-types "^1.0.1"
     scule "^1.0.0"
     strip-literal "^1.0.0"
+    unplugin "^1.0.1"
+
+unplugin-auto-import@^0.14.3:
+  version "0.14.3"
+  resolved "https://registry.npmmirror.com/unplugin-auto-import/-/unplugin-auto-import-0.14.3.tgz#e25ede11e6013e7f115dc946fc489d814839ad8d"
+  integrity sha512-6eCHLnsOPwLjNZHQkb95S5jbTWW2JH/jKiQUzTeWJAb8XFpDFZPEhxDeIDAr7HOF76Nz6EGhKF8PQduzygdICg==
+  dependencies:
+    "@antfu/utils" "^0.7.2"
+    "@nuxt/kit" "^3.1.2"
+    "@rollup/pluginutils" "^5.0.2"
+    local-pkg "^0.4.3"
+    magic-string "^0.27.0"
+    unimport "^2.2.4"
     unplugin "^1.0.1"
 
 unplugin-vue-components@^0.23.0:
