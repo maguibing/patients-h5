@@ -17,7 +17,7 @@ const isPass = $ref(true)
 const show = $ref(false)
 const code = $ref('')
 let time = $ref(0)
-const timer = $ref<number>()
+let timer = $ref<number>()
 const form = $ref<FormInstance>()
 
 const loginForm: IForm = reactive({
@@ -49,7 +49,7 @@ const getcode = async () => {
   time = 60
   Toast.success('发送成功')
   clearInterval(timer)
-  setInterval(() => {
+  timer = setInterval(() => {
     time--
     if (time <= 0) window.clearInterval(timer)
   }, 1000)
