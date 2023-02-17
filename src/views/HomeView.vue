@@ -1,20 +1,7 @@
-<script setup lang="ts">
-import { request } from '@/services/request'
-import { useUserStore } from '@/stores'
-import type { User } from '@/types/user'
-
-const store = useUserStore()
-
-// const login = async () => {
-//   const res = await request<User>('/login/password', 'post', {
-//     mobile: '13211112222',
-//     password: 'abc12345'
-//   })
-
-//   store.setUser(res.data)
-// }
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <main></main>
+  <div class="home-page">home</div>
 </template>
+
+<style lang="scss" scoped></style>

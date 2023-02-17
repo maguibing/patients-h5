@@ -1,12 +1,38 @@
 <script setup lang="ts">
+import { loginByPassword } from '@/services/user'
+import { useUserStore } from '@/stores'
 import { mobileRules, passwordRules } from '@/utils/rule'
-import { ref, reactive } from 'vue'
+import { Toast } from 'vant'
+import { $ref } from 'vue/macros'
+import { reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-const loginForm = reactive({
-  mobile: '',
-  password: '',
+interface IForm {
+  mobile: string
+  password: string
+  agree: boolean
+}
+
+const isPass = $ref(false)
+const show = $ref(false)
+
+const loginForm: IForm = reactive({
+  mobile: '13230000001',
+  password: 'abc12345',
   agree: false
 })
+
+const route = useRoute()
+const router = useRouter()
+const store = useUserStore()
+
+const login = async () => {
+  if (!loginForm.agree) return Toast('请勾选')
+  const res = await loginByPassword(loginForm.mobile, loginForm.password)
+  store.setUser(res.data)
+  router.push((route.query.returnUrl as string) || '/user')
+  Toast.success('登陆成功')
+}
 </script>
 
 <template>
@@ -17,14 +43,14 @@ const loginForm = reactive({
     ></cp-nav-bar>
     <!-- 头部 -->
     <div class="login-head">
-      <h3>密码登录</h3>
-      <a href="javascript:;">
-        <span>短信验证码登录</span>
+      <h3>{{ isPass ? '密码登录' : '短信验证码登录' }}</h3>
+      <a href="javascript:;" @click="isPass = !isPass">
+        <span>{{ !isPass ? '密码登录' : '短信验证码登录' }}</span>
         <van-icon name="arrow"></van-icon>
       </a>
     </div>
     <!-- 表单 -->
-    <van-form autocomplete="off">
+    <van-form autocomplete="off" @submit="login">
       <van-field
         placeholder="请输入手机号"
         type="tel"
@@ -32,6 +58,7 @@ const loginForm = reactive({
         :rules="mobileRules"
       ></van-field>
       <van-field
+        v-if="isPass"
         v-model="loginForm.password"
         placeholder="请输入密码"
         type="password"
@@ -46,7 +73,9 @@ const loginForm = reactive({
         </van-checkbox>
       </div>
       <div class="cp-cell">
-        <van-button block round type="primary">登 录</van-button>
+        <van-button block round type="primary" native-type="submit"
+          >登 录</van-button
+        >
       </div>
       <div class="cp-cell">
         <a href="javascript:;">忘记密码？</a>
@@ -67,26 +96,32 @@ const loginForm = reactive({
   &-page {
     padding-top: 46px;
   }
+
   &-head {
     display: flex;
     padding: 30px 30px 50px;
     justify-content: space-between;
     align-items: flex-end;
     line-height: 1;
+
     h3 {
       font-weight: normal;
       font-size: 24px;
     }
+
     a {
       font-size: 15px;
     }
   }
+
   &-other {
     margin-top: 60px;
     padding: 0 30px;
+
     .icon {
       display: flex;
       justify-content: center;
+
       img {
         width: 36px;
         height: 36px;
@@ -95,8 +130,10 @@ const loginForm = reactive({
     }
   }
 }
+
 .van-form {
   padding: 0 14px;
+
   .cp-cell {
     height: 52px;
     line-height: 24px;
@@ -104,6 +141,7 @@ const loginForm = reactive({
     box-sizing: border-box;
     display: flex;
     align-items: center;
+
     .van-checkbox {
       a {
         color: var(--cp-primary);
@@ -111,8 +149,10 @@ const loginForm = reactive({
       }
     }
   }
+
   .btn-send {
     color: var(--cp-primary);
+
     &.active {
       color: rgba(22, 194, 163, 0.5);
     }
