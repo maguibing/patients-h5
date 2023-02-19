@@ -1,3 +1,5 @@
+// import {FieldRule} from 'vant'
+
 // 表单校验
 const mobileRules = [
   { required: true, message: '请输入手机号' },

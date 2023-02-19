@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { getPatientList } from '@/services/user'
+import {
+  getPatientList,
+  addPatient,
+  editPatient,
+  delPatient
+} from '@/services/user'
 import type { PatientList, Patient } from '@/types/user'
 import { onMounted, ref, computed } from 'vue'
+import IdValidator from 'id-validator'
+import { Toast } from 'vant'
 
 const patientList = ref<PatientList>([])
 const show = ref(false)
@@ -14,7 +21,7 @@ const initPatient: Patient = {
   name: '',
   gender: 1,
   defaultFlag: 0,
-  idCard: ''
+  idCard: '11010119890512132X'
 }
 
 const patient = ref<Patient>({
@@ -39,7 +46,35 @@ const defaultFlag = computed({
   }
 })
 
-const onFinish = () => {}
+const onFinish = async () => {
+  if (!patient.value.name) return
+  if (!patient.value.idCard) return
+  const validate = new IdValidator()
+  if (!validate.isValid(patient.value.idCard)) return Toast('身份证号不正确')
+
+  patient.value.id
+    ? await editPatient({
+        name: patient.value.name,
+        idCard: patient.value.idCard,
+        defaultFlag: patient.value.defaultFlag,
+        gender: patient.value.gender,
+        id: patient.value.id
+      })
+    : await addPatient(patient.value)
+  await loadPatientList()
+  show.value = false
+}
+
+const editPatientFnc = (data: Patient) => {
+  show.value = true
+  patient.value = { ...data }
+}
+
+const delPatientFnc = async () => {
+  await delPatient(patient.value.id + '')
+  loadPatientList()
+  show.value = false
+}
 
 onMounted(() => {
   loadPatientList()
@@ -59,7 +94,9 @@ onMounted(() => {
           <span>{{ item.genderValue }}</span>
           <span>{{ item.age }}岁</span>
         </div>
-        <div class="icon"><cp-icon name="user-edit" /></div>
+        <div class="icon">
+          <cp-icon name="user-edit" @click="editPatientFnc(item)" />
+        </div>
         <div class="tag" v-if="item.defaultFlag === 1">默认</div>
       </div>
       <div
@@ -74,8 +111,9 @@ onMounted(() => {
     <van-popup v-model:show="show" position="right">
       <cp-nav-bar
         :back="() => (show = !show)"
-        title="添加患者"
+        :title="patient.id ? '编辑患者' : '添加患者'"
         right-text="保存"
+        @click-right="onFinish"
       >
       </cp-nav-bar>
       <van-form autocomplete="off" ref="form">
@@ -104,6 +142,11 @@ onMounted(() => {
           </template>
         </van-field>
       </van-form>
+      <van-action-bar v-if="patient.id">
+        <van-action-bar-button @click="delPatientFnc()"
+          >删除</van-action-bar-button
+        >
+      </van-action-bar>
     </van-popup>
   </div>
 </template>
@@ -117,6 +160,14 @@ onMounted(() => {
       height: 100%;
       padding-top: 46px;
       box-sizing: border-box;
+    }
+    .van-action-bar {
+      padding: 0 10px;
+      margin-bottom: 10px;
+      .van-button {
+        color: var(--cp-price);
+        background-color: var(--cp-bg);
+      }
     }
   }
 }

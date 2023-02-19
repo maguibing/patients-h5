@@ -1,4 +1,10 @@
-import type { CodeType, UserInfo, User, PatientList } from '@/types/user'
+import type {
+  CodeType,
+  UserInfo,
+  User,
+  PatientList,
+  Patient
+} from '@/types/user'
 import { request } from './request'
 
 /**
@@ -40,4 +46,28 @@ export const getUserInfo = () => {
  */
 export const getPatientList = () => {
   return request<PatientList>('/patient/mylist')
+}
+
+/**
+ * 添加患者信息
+ * @param patient
+ */
+export const addPatient = (patient: Patient) => {
+  return request('/patient/add', 'POST', patient)
+}
+
+/**
+ * 编辑患者信息
+ * @param patient
+ */
+export const editPatient = (patient: Patient) => {
+  return request('/patient/update', 'PUT', patient)
+}
+
+/**
+ * 删除患者
+ * @param id
+ */
+export const delPatient = (id: string) => {
+  return request(`/patient/del/${id}`, 'DELETE')
 }

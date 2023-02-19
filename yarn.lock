@@ -2156,6 +2156,11 @@ https-proxy-agent@^5.0.1:
     agent-base "6"
     debug "4"
 
+id-validator@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/id-validator/-/id-validator-1.3.0.tgz#5e0546803c0d17f4680c31f2c8c8194c582d695a"
+  integrity sha512-f/5FfaCBqdnLmDN3mYDHhZIHlnV6Xk6M6Ef2INT9Ng/IEvwMQYRIgj12ANdvUoaWz3o7SRb39z/fFC4dB64gHA==
+
 ignore@^5.2.0, ignore@^5.2.4:
   version "5.2.4"
   resolved "https://registry.npmmirror.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
