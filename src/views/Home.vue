@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-const active = ref('recommend')
+import type { KnowledgeType } from '@/types/consult'
+const active = ref<KnowledgeType>('recommend')
 </script>
 
 <template>
