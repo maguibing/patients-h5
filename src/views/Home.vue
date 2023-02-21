@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { KnowledgeType } from '@/types/consult'
-const active = ref<KnowledgeType>('recommend')
+const active = ref<KnowledgeType>('like')
 </script>
 
 <template>
@@ -81,6 +81,7 @@ const active = ref<KnowledgeType>('recommend')
 
     <van-tabs shrink sticky v-model:active="active">
       <van-tab title="关注" name="like">
+        <follow-doctor></follow-doctor>
         <knowledge-list type="like"></knowledge-list>
       </van-tab>
       <van-tab title="推荐" name="recommend">

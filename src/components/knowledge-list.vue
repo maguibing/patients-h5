@@ -1,26 +1,35 @@
 <script setup lang="ts">
-import type { KnowledgeType } from '@/types/consult'
+import type {
+  KnowledgeList,
+  KnowledgeParams,
+  KnowledgeType
+} from '@/types/consult'
 import { ref } from 'vue'
+import { getKnowledgePage } from '@/services/consult'
 const props = defineProps<{
   type: KnowledgeType
 }>()
 
-const list = ref<number[]>([])
+const list = ref<KnowledgeList>([])
 const loading = ref(false)
 const finished = ref(false)
-const onLoad = () => {
+
+const reqParams = ref<KnowledgeParams>({
+  current: 1,
+  pageSize: 10,
+  type: props.type
+})
+
+const onLoad = async () => {
   // 加载数据
-  console.log('loading')
-  // 模拟加载更多
-  setTimeout(() => {
-    const data = [1, 2, 3, 4, 5]
-    list.value.push(...data)
-    // 模拟加载完毕
-    if (list.value.length > 20) {
-      finished.value = true
-    }
-    loading.value = false
-  }, 1000)
+  const res = await getKnowledgePage(reqParams.value)
+  list.value.push(...res.data.rows)
+  if (reqParams.value.current >= res.data.pageTotal) {
+    finished.value = true
+  } else {
+    reqParams.value.current++
+  }
+  loading.value = false
 }
 </script>
 
@@ -32,7 +41,7 @@ const onLoad = () => {
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <knowledge-card v-for="(item, i) in list" :key="i" />
+      <knowledge-card v-for="(item, i) in list" :key="i" :item="item" />
     </van-list>
   </div>
 </template>

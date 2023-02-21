@@ -10,6 +10,8 @@ declare module '@vue/runtime-core' {
     CpIcon: typeof import('./src/components/cp-icon.vue')['default']
     CpNavBar: typeof import('./src/components/cp-nav-bar.vue')['default']
     CpRadioBtn: typeof import('./src/components/cp-radio-btn.vue')['default']
+    DoctorCard: typeof import('./src/components/doctor-card.vue')['default']
+    FollowDoctor: typeof import('./src/components/follow-doctor.vue')['default']
     KnowledgeCard: typeof import('./src/components/knowledge-card.vue')['default']
     KnowledgeList: typeof import('./src/components/knowledge-list.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
