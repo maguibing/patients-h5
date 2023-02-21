@@ -55,6 +55,11 @@ const router = createRouter({
       meta: { title: '家庭档案' }
     },
     {
+      path: '/consult/fast',
+      component: () => import('@/views/ConsultFast.vue'),
+      meta: { title: '急速问诊' }
+    },
+    {
       path: '/order',
       name: 'Order',
       component: () => import('@/views/Order.vue'),
@@ -65,7 +70,6 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   Nprogress.start()
-  document.title = `优医问诊-${to.meta.title || ''}`
   const store = useUserStore()
   const whiteList = ['/login', '/register']
   if (!store.user?.token && !whiteList.includes(to.path)) return '/login'
