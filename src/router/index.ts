@@ -60,6 +60,16 @@ const router = createRouter({
       meta: { title: '急速问诊' }
     },
     {
+      path: '/consult/dep',
+      component: () => import('@/views/ConsultDep.vue'),
+      meta: { title: '选择科室' }
+    },
+    {
+      path: '/consult/illness',
+      component: () => import('@/views/ConsultIllness.vue'),
+      meta: { title: '病情描述' }
+    },
+    {
       path: '/order',
       name: 'Order',
       component: () => import('@/views/Order.vue'),

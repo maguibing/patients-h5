@@ -1,7 +1,6 @@
 import { ConsultType, IllnessTime } from '@/enums'
 // props类型 recommend推荐，fatReduction减脂，food健康饮食，like关注医生页面文章
 export type KnowledgeType = 'like' | 'recommend' | 'fatReduction' | 'food'
-
 export type FollowType = 'doc' | 'knowledge' | 'topic' | 'disease'
 
 export type PageParams = {
@@ -127,3 +126,21 @@ export type Consult = {
 // 问诊记录-全部可选
 export type PartialConsult = Partial<Consult>
 // Required 转换为全部必须   Partial 转换问全部可选  两个内置的泛型类型
+
+// 科室
+export type SubDep = {
+  /** 科室ID */
+  id: string
+  /** 科室名称 */
+  name: string
+}
+
+export type TopDep = SubDep & {
+  /** 二级科室数组 */
+  child: SubDep[]
+}
+
+export type ConsultIllness = Pick<
+  PartialConsult,
+  'illnessDesc' | 'illnessTime' | 'consultFlag' | 'pictures'
+>

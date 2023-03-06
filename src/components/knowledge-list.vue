@@ -10,6 +10,8 @@ const props = defineProps<{
   type: KnowledgeType
 }>()
 
+// 获取用户信息
+
 const list = ref<KnowledgeList>([])
 const loading = ref(false)
 const finished = ref(false)
