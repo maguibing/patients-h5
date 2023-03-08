@@ -9,8 +9,13 @@ import type { PatientList, Patient } from '@/types/user'
 import { onMounted, ref, computed } from 'vue'
 import IdValidator from 'id-validator'
 import { Toast } from 'vant'
-
+import { useRoute, useRouter } from 'vue-router'
+import { useConsultStore } from '@/stores'
+const route = useRoute()
+const router = useRouter()
+const store = useConsultStore()
 const patientList = ref<PatientList>([])
+const isChange = computed(() => route.query.isChange === '1')
 const show = ref(false)
 const options = [
   { label: '女', value: 0 },
@@ -24,6 +29,13 @@ const initPatient: Patient = {
   idCard: '11010119890512132X'
 }
 
+const patientId = ref<string>()
+const selectedPatient = (item: Patient) => {
+  if (isChange.value) {
+    patientId.value = item.id
+  }
+}
+
 const patient = ref<Patient>({
   ...initPatient
 })
@@ -31,6 +43,13 @@ const patient = ref<Patient>({
 const loadPatientList = async () => {
   const res = await getPatientList()
   patientList.value = res.data
+
+  // 设置默认选中的ID，当你是选择患者的时候，且有患者信息的时候
+  if (isChange.value && patientList.value.length) {
+    const defPatient = patientList.value.find((item) => item.defaultFlag === 1)
+    if (defPatient) patientId.value = defPatient.id
+    else patientId.value = patientList.value[0].id
+  }
 }
 
 const showPopup = () => {
@@ -76,6 +95,12 @@ const delPatientFnc = async () => {
   show.value = false
 }
 
+const next = () => {
+  if (!patientId.value) return
+  store.setPatient(patientId.value)
+  router.push('/consult/pay')
+}
+
 onMounted(() => {
   loadPatientList()
 })
@@ -83,9 +108,19 @@ onMounted(() => {
 
 <template>
   <div class="patient-page">
-    <cp-nav-bar title="家庭档案"></cp-nav-bar>
+    <div class="patient-change" v-if="isChange">
+      <h3>请选择患者信息</h3>
+      <p>以便医生给出更准确的治疗，信息仅医生可见</p>
+    </div>
+    <cp-nav-bar :title="isChange ? '选择患者' : '家庭档案'"></cp-nav-bar>
     <div class="patient-list">
-      <div class="patient-item" v-for="item in patientList" :key="item.id">
+      <div
+        class="patient-item"
+        v-for="item in patientList"
+        :key="item.id"
+        @click="selectedPatient(item)"
+        :class="{ selected: patientId === item.id }"
+      >
         <div class="info">
           <span class="name">{{ item.name }}</span>
           <span class="id">{{
@@ -148,12 +183,16 @@ onMounted(() => {
         >
       </van-action-bar>
     </van-popup>
+    <div class="patient-next" v-if="isChange">
+      <van-button type="primary" round block @click="next">下一步</van-button>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .patient-page {
   padding: 46px 0 80px;
+
   :deep() {
     .van-popup {
       width: 100%;
@@ -161,9 +200,11 @@ onMounted(() => {
       padding-top: 46px;
       box-sizing: border-box;
     }
+
     .van-action-bar {
       padding: 0 10px;
       margin-bottom: 10px;
+
       .van-button {
         color: var(--cp-price);
         background-color: var(--cp-bg);
@@ -171,6 +212,7 @@ onMounted(() => {
     }
   }
 }
+
 .patient-list {
   padding: 15px;
 }
@@ -186,31 +228,37 @@ onMounted(() => {
   border: 1px solid var(--cp-bg);
   transition: all 0.3s;
   overflow: hidden;
+
   .info {
     display: flex;
     flex-wrap: wrap;
     flex: 1;
+
     span {
       color: var(--cp-tip);
       margin-right: 20px;
       line-height: 30px;
+
       &.name {
         font-size: 16px;
         color: var(--cp-text1);
         width: 80px;
         margin-right: 0;
       }
+
       &.id {
         color: var(--cp-text2);
         width: 180px;
       }
     }
   }
+
   .icon {
     color: var(--cp-tag);
     width: 20px;
     text-align: center;
   }
+
   .tag {
     position: absolute;
     right: 60px;
@@ -225,29 +273,59 @@ onMounted(() => {
     justify-content: center;
     align-items: center;
   }
+
   &.selected {
     border-color: var(--cp-primary);
     background-color: var(--cp-plain);
+
     .icon {
       color: var(--cp-primary);
     }
   }
 }
+
 .patient-add {
   background-color: var(--cp-bg);
   color: var(--cp-primary);
   text-align: center;
   padding: 15px 0;
   border-radius: 8px;
+
   .cp-icon {
     font-size: 24px;
   }
 }
+
 .patient-tip {
   color: var(--cp-tag);
   padding: 12px 0;
 }
+
 .pb4 {
   padding-bottom: 4px;
+}
+
+.patient-change {
+  padding: 15px;
+
+  > h3 {
+    font-weight: normal;
+    margin-bottom: 5px;
+  }
+
+  > p {
+    color: var(--cp-text3);
+  }
+}
+
+.patient-next {
+  padding: 15px;
+  background-color: #fff;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+  box-sizing: border-box;
 }
 </style>

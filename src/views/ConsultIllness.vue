@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { ConsultIllness } from '@/types/consult'
-import { computed, ref } from 'vue'
+import type { ConsultIllness, Image } from '@/types/consult'
+import { computed, ref, onMounted } from 'vue'
 import { IllnessTime } from '@/enum'
 import { useRouter } from 'vue-router'
-// import { showToast } from 'vant'
 import { useConsultStore } from '@/stores'
 import type {
   UploaderAfterRead,
@@ -21,13 +20,14 @@ const flagOptions = [
   { label: '就诊过', value: 0 },
   { label: '没就诊过', value: 1 }
 ]
+
 const form = ref<ConsultIllness>({
   illnessDesc: '',
   illnessTime: undefined,
   consultFlag: undefined,
   pictures: []
 })
-const fileList = ref([])
+const fileList = ref<Image[]>([])
 const onAfterRead: UploaderAfterRead = async (item) => {
   // TODO 上传图片
   if (Array.isArray(item)) return
@@ -72,6 +72,20 @@ const disabled = computed(
     form.value.illnessTime === undefined ||
     form.value.consultFlag === undefined
 )
+
+onMounted(() => {
+  if (store.consult.illnessDesc) {
+    // showConfirmDialog({
+    //   title: '温馨提示',
+    //   message: '是否恢复您之前填写的病情信息呢？',
+    // }).then(() => {
+    // const { illnessDesc, illnessTime, consultFlag, pictures } = store.consult
+    //   form.value = { illnessDesc, illnessTime, consultFlag, pictures }
+    // 图片回显
+    //   fileList.value = pictures || []
+    // })
+  }
+})
 </script>
 
 <template>
@@ -172,6 +186,7 @@ const disabled = computed(
     }
   }
 }
+
 .illness-form {
   padding: 15px;
 
@@ -190,6 +205,7 @@ const disabled = computed(
     }
   }
 }
+
 .illness-img {
   padding-top: 16px;
   margin-bottom: 30px;
@@ -236,6 +252,7 @@ const disabled = computed(
 
 .van-button {
   font-size: 16px;
+
   &.disabled {
     opacity: 1;
     background: #fafafa;
