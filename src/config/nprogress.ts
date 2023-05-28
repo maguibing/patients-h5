@@ -9,3 +9,4 @@ Nprogress.configure({
   minimum: 0.3 // 初始化时的最小百分比
 })
 export default Nprogress
+
