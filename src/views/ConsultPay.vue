@@ -84,6 +84,21 @@ onBeforeRouteLeave(() => {
 })
 
 onMounted(() => {
+  if (
+    !store.consult.type ||
+    !store.consult.illnessType ||
+    !store.consult.patientId
+  ) {
+    return Dialog.alert({
+      title: '温馨提示',
+      message:
+        '问诊信息不完整请重新填写，如有未支付的问诊订单可在问诊记录中继续支付！',
+      closeOnPopstate: false
+    }).then((res) => {
+      router.push('/')
+    })
+  }
+
   LoadingOrderData()
   LoadingPatientInformation()
 })
