@@ -79,6 +79,14 @@ const router = createRouter({
       name: 'Order',
       component: () => import('@/views/Order.vue'),
       meta: { title: '订单' }
+    },
+    {
+      path: '/room',
+      component: () => import('@/views/Room.vue'),
+      meta: { title: '问诊室' },
+      beforeEnter(to) {
+        if (to.query.payResult === 'false') return '/user/consult'
+      }
     }
   ]
 })
