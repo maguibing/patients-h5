@@ -1,25 +1,26 @@
 <script setup lang="ts">
 import type { ConsultIllness, Image } from '@/types/consult'
 import { computed, ref, onMounted } from 'vue'
-import { IllnessTime } from '@/enum'
+// import { IllnessTime } from '@/enum'
 import { useRouter } from 'vue-router'
 import { useConsultStore } from '@/stores'
+import { timeOptions, flagOptions } from '@/services/constants'
 import type {
   UploaderAfterRead,
   UploaderFileListItem
 } from 'vant/lib/uploader/types'
 import { uploadImage } from '@/services/consult'
 
-const timeOptions = [
-  { label: '一周内', value: IllnessTime.Week },
-  { label: '一月内', value: IllnessTime.Month },
-  { label: '半年内', value: IllnessTime.HalfYear },
-  { label: '大于半年', value: IllnessTime.More }
-]
-const flagOptions = [
-  { label: '就诊过', value: 0 },
-  { label: '没就诊过', value: 1 }
-]
+// const timeOptions = [
+//   { label: '一周内', value: IllnessTime.Week },
+//   { label: '一月内', value: IllnessTime.Month },
+//   { label: '半年内', value: IllnessTime.HalfYear },
+//   { label: '大于半年', value: IllnessTime.More }
+// ]
+// const flagOptions = [
+//   { label: '就诊过', value: 0 },
+//   { label: '没就诊过', value: 1 }
+// ]
 
 const form = ref<ConsultIllness>({
   illnessDesc: '',
